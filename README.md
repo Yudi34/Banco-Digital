@@ -56,6 +56,4 @@ Passos:
 - `static/`: estilos CSS
 - `atm.py`: logica de conta e transacoes
 
-## Screenshot
 
-Voce pode adicionar uma imagem do sistema em `static/screenshot.png` e incluir no README.
