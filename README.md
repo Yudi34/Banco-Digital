@@ -50,7 +50,7 @@ Passos:
 
 ## Estrutura principal
 
-- `main.py`: ponto de entrada da aplicacao
+- `main.py`: ponto de entrada da aplicação
 - `webapp/`: rotas e servicos da camada web
 - `templates/`: telas HTML
 - `static/`: estilos CSS
