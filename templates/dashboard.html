@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="dashboard-shell reveal">
+    <header class="dashboard-header">
+        <div>
+            <p class="kicker">PAINEL FINANCEIRO</p>
+            <h1>Bem-vindo, {{ username }}</h1>
+        </div>
+        <form action="{{ url_for('bank.logout') }}" method="post">
+            <button type="submit" class="btn ghost">Encerrar sessão</button>
+        </form>
+    </header>
+
+    <section class="card-account reveal delay-1">
+        <div class="account-left">
+            <p class="account-label">Conta digital</p>
+            <h2>R$ {{ "%.2f"|format(balance) }}</h2>
+            <p class="account-foot">Agência 0001 • Conta 45892-0</p>
+        </div>
+        <div class="account-chip"></div>
+    </section>
+
+    <section class="kpi-grid">
+        <article class="kpi-card reveal delay-1">
+            <p>Entradas</p>
+            <strong>R$ {{ "%.2f"|format(total_deposits) }}</strong>
+        </article>
+        <article class="kpi-card reveal delay-2">
+            <p>Saídas</p>
+            <strong>R$ {{ "%.2f"|format(total_withdraws) }}</strong>
+        </article>
+        <article class="kpi-card reveal delay-3">
+            <p>Movimentações</p>
+            <strong>{{ transaction_count }}</strong>
+        </article>
+    </section>
+
+    <div class="ops-grid">
+        <article class="card reveal delay-2">
+            <h3>Novo depósito</h3>
+            <p class="panel-note">Adicione saldo instantaneamente.</p>
+            <form action="{{ url_for('bank.transaction') }}" method="post" class="form inline-form">
+                <input type="hidden" name="type" value="deposit">
+                <label for="deposit-amount">Valor (R$)</label>
+                <input id="deposit-amount" name="amount" type="text" placeholder="0.00" required>
+                <button type="submit" class="btn">Depositar</button>
+            </form>
+        </article>
+
+        <article class="card reveal delay-3">
+            <h3>Novo saque</h3>
+            <p class="panel-note">Retire saldo da conta corrente.</p>
+            <form action="{{ url_for('bank.transaction') }}" method="post" class="form inline-form">
+                <input type="hidden" name="type" value="withdraw">
+                <label for="withdraw-amount">Valor (R$)</label>
+                <input id="withdraw-amount" name="amount" type="text" placeholder="0.00" required>
+                <button type="submit" class="btn btn-alt">Sacar</button>
+            </form>
+        </article>
+    </div>
+
+    <article class="card reveal delay-4">
+        <div class="statement-head">
+            <h3>Extrato</h3>
+            <span class="statement-meta">Últimas movimentações</span>
+        </div>
+
+        {% if entries %}
+            <ul class="statement-list">
+                {% for entry in entries %}
+                    <li class="statement-item">
+                        <div>
+                            <p class="statement-title">{{ entry.label }}</p>
+                            <p class="statement-description">{{ entry.description }}</p>
+                        </div>
+                        <p class="statement-value {{ entry.kind }}">
+                            {% if entry.kind == "deposit" %}+{% else %}-{% endif %}R$ {{ "%.2f"|format(entry.amount) }}
+                        </p>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="panel-note">Nenhuma movimentação registrada ainda.</p>
+        {% endif %}
+    </article>
+</section>
+{% endblock %}

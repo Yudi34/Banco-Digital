@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="auth-shell reveal">
+    <header class="hero premium">
+        <div>
+            <p class="kicker">BANCO DIGITAL INTELIGENTE</p>
+            <h1>Sua conta com cara de aplicativo real.</h1>
+            <p class="subtitle">Acompanhe saldo, realize movimentações e veja seu extrato em um painel limpo e objetivo.</p>
+        </div>
+        <div class="hero-metrics">
+            <article>
+                <p>Operações online</p>
+                <strong>24/7</strong>
+            </article>
+            <article>
+                <p>Proteção da sessão</p>
+                <strong>Ativa</strong>
+            </article>
+            <article>
+                <p>Painel em tempo real</p>
+                <strong>Instantâneo</strong>
+            </article>
+        </div>
+    </header>
+
+    <div class="card-grid">
+        <article class="card reveal delay-1">
+            <h2>Abrir conta</h2>
+            <p class="panel-note">Crie suas credenciais para começar.</p>
+            <form action="{{ url_for('bank.register') }}" method="post" class="form">
+                <label for="register-username">Usuario</label>
+                <input id="register-username" name="username" type="text" required>
+
+                <label for="register-password">Senha</label>
+                <input id="register-password" name="password" type="password" required>
+
+                <button type="submit" class="btn">Abrir conta</button>
+            </form>
+        </article>
+
+        <article class="card reveal delay-2">
+            <h2>Entrar no painel</h2>
+            <p class="panel-note">Acesse seu dashboard bancário.</p>
+            <form action="{{ url_for('bank.login') }}" method="post" class="form">
+                <label for="login-username">Usuario</label>
+                <input id="login-username" name="username" type="text" required>
+
+                <label for="login-password">Senha</label>
+                <input id="login-password" name="password" type="password" required>
+
+                <button type="submit" class="btn btn-alt">Acessar conta</button>
+            </form>
+        </article>
+    </div>
+</section>
+{% endblock %}
