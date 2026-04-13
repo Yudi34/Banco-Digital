@@ -1,29 +1,29 @@
 # Banco Digital 2.0 (Flask)
 
-Aplicativo bancario web feito com Flask para estudos e portfolio.
+Aplicativo bancário web feito com Flask para estudos e portfólio.
 
-Esta e a versao 2.0 do projeto, com evolucao visual, melhorias de acessibilidade,
-nova organizacao de rotas e experiencia de uso mais completa que a versao base.
+Esta é a versão 2.0 do projeto, com evolução visual, melhorias de acessibilidade,
+nova organização de rotas e uma experiência de uso mais completa do que a versão base.
 
 ## O que mudou na 2.0
 
 - Novo visual com layout mais moderno e responsivo
 - Dashboard, perfil e extrato redesenhados
-- Filtros no extrato por tipo de movimentacao
+- Filtros no extrato por tipo de movimentação
 - Melhorias de acessibilidade, foco por teclado e contraste alto
-- Feedback visual de carregamento nos formularios
-- Separacao das rotas em modulos de autenticacao e operacoes bancarias
-- Melhor tratamento de valores monetarios com parser dedicado
+- Feedback visual de carregamento nos formulários
+- Separação das rotas em módulos de autenticação e operações bancárias
+- Melhor tratamento de valores monetários com parser dedicado
 
 ## Funcionalidades
 
-- Criacao de conta
+- Criação de conta
 - Login e logout
-- Deposito e saque
-- Extrato de transacoes
+- Depósito e saque
+- Extrato de transações
 - Dashboard com resumo financeiro
-- Perfil com alteracao de senha e limites por operacao
-- Transferencia entre usuarios
+- Perfil com alteração de senha e limites por operação
+- Transferência entre usuários
 
 ## Tecnologias
 
@@ -45,13 +45,13 @@ nova organizacao de rotas e experiencia de uso mais completa que a versao base.
 
 ## Deploy no Render
 
-O projeto ja esta preparado com `render.yaml` e `Procfile`.
+O projeto já está preparado com `render.yaml` e `Procfile`.
 
 Passos:
 
 1. Entre em https://render.com e conecte sua conta GitHub.
 2. Clique em New + > Web Service.
-3. Selecione o repositorio `Banco-Digital`.
+3. Selecione o repositório `Banco-Digital`.
 4. Confirme os comandos:
    - Build Command: `pip install -r requirements.txt`
    - Start Command: `gunicorn main:app`
@@ -67,16 +67,16 @@ Passos:
 ## Estrutura principal
 
 - `main.py`: ponto de entrada da aplicação
-- `webapp/`: rotas e servicos da camada web
+- `webapp/`: rotas e serviços da camada web
 - `templates/`: telas HTML
 - `static/`: estilos CSS
-- `atm.py`: logica de conta e transacoes
-- `money.py`: parse e formatacao de valores monetarios
+- `atm.py`: lógica de conta e transações
+- `money.py`: parse e formatação de valores monetários
 
-## Versoes
+## Versões
 
-- `versao-antiga`: implementacao base do projeto
-- `versao-2-0`: versao atual com melhorias visuais e estruturais
+- `versao-antiga`: implementação base do projeto
+- `versao-2-0`: versão atual com melhorias visuais e estruturais
 - `v2.0.0`: tag da release 2.0
 
 
