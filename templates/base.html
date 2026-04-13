@@ -3,35 +3,40 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ title or "Banco Web" }}</title>
+    <title>{{ title or "NovaConta" }}</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='url(%23g)'/><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%2316c6b8'/><stop offset='1' stop-color='%23ffb24c'/></linearGradient></defs><text x='16' y='22' text-anchor='middle' font-family='monospace' font-weight='700' font-size='16' fill='%2304161f'>Y</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
-<body>
+<body class="app-loading">
     <div class="bg-gradient"></div>
+    <div class="aurora-bottom"></div>
     <div class="grid-overlay"></div>
 
     <main class="page">
         <header class="app-topbar reveal">
             <div class="brand-wrap">
-                <span class="brand-mark"></span>
+                <span class="brand-mark">Y</span>
                 <div>
-                    <p class="brand-kicker">BANKING APP</p>
+                    <p class="brand-kicker">Conta digital</p>
                     <p class="brand-name">NovaConta</p>
                 </div>
             </div>
+            <button type="button" class="contrast-toggle" id="contrast-toggle" aria-pressed="false" aria-label="Ativar contraste elevado" title="Ativar contraste elevado">
+                Contraste alto
+            </button>
             {% if session.get('username') %}
                 <p class="session-pill">Conectado: {{ session.get('username') }}</p>
             {% endif %}
         </header>
 
-        {% with messages = get_flashed_messages() %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 <div class="flash-wrap">
-                    {% for message in messages %}
-                        <p class="flash">{{ message }}</p>
+                    {% for category, message in messages %}
+                        <p class="flash flash-{{ category }}">{{ message }}</p>
                     {% endfor %}
                 </div>
             {% endif %}
@@ -39,5 +44,44 @@
 
         {% block content %}{% endblock %}
     </main>
+
+    <script>
+        const contrastToggle = document.getElementById('contrast-toggle');
+        const savedContrast = localStorage.getItem('high-contrast') === '1';
+
+        if (savedContrast) {
+            document.body.classList.add('high-contrast');
+            if (contrastToggle) {
+                contrastToggle.setAttribute('aria-pressed', 'true');
+            }
+        }
+
+        if (contrastToggle) {
+            contrastToggle.addEventListener('click', () => {
+                const enabled = document.body.classList.toggle('high-contrast');
+                contrastToggle.setAttribute('aria-pressed', enabled ? 'true' : 'false');
+                localStorage.setItem('high-contrast', enabled ? '1' : '0');
+            });
+        }
+
+        window.addEventListener('load', () => {
+            document.body.classList.remove('app-loading');
+        });
+
+        // Melhora UX: evita envios duplicados e indica processamento.
+        document.querySelectorAll('form').forEach((form) => {
+            form.addEventListener('submit', () => {
+                const submitButton = form.querySelector('button[type="submit"]');
+                if (!submitButton || submitButton.disabled) {
+                    return;
+                }
+
+                submitButton.dataset.originalLabel = submitButton.textContent.trim();
+                submitButton.textContent = submitButton.dataset.loadingText || 'Processando...';
+                submitButton.disabled = true;
+                submitButton.classList.add('is-loading');
+            });
+        });
+    </script>
 </body>
 </html>

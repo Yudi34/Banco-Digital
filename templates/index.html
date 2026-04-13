@@ -4,54 +4,96 @@
 <section class="auth-shell reveal">
     <header class="hero premium">
         <div>
-            <p class="kicker">BANCO DIGITAL INTELIGENTE</p>
-            <h1>Sua conta com cara de aplicativo real.</h1>
-            <p class="subtitle">Acompanhe saldo, realize movimentações e veja seu extrato em um painel limpo e objetivo.</p>
+            <p class="kicker">BANCO DIGITAL DO FUTURO</p>
+            <h1>Controle total do seu dinheiro.</h1>
+            <p class="subtitle">Gerencie saldo, movimentações e transferências em um painel elegante, simples de usar e otimizado para desktop e celular da NovaConta.</p>
         </div>
         <div class="hero-metrics">
             <article>
-                <p>Operações online</p>
-                <strong>24/7</strong>
+                <p>Data de hoje</p>
+                <strong id="today-date">--/--</strong>
             </article>
             <article>
-                <p>Proteção da sessão</p>
-                <strong>Ativa</strong>
+                <p>Criptografia</p>
+                <strong>SCRYPT</strong>
             </article>
             <article>
-                <p>Painel em tempo real</p>
-                <strong>Instantâneo</strong>
+                <p>Transferências</p>
+                <strong>Instantâneas</strong>
             </article>
         </div>
     </header>
 
-    <div class="card-grid">
-        <article class="card reveal delay-1">
-            <h2>Abrir conta</h2>
-            <p class="panel-note">Crie suas credenciais para começar.</p>
-            <form action="{{ url_for('bank.register') }}" method="post" class="form">
-                <label for="register-username">Usuario</label>
-                <input id="register-username" name="username" type="text" required>
+    <article class="card auth-tabs-card reveal delay-1">
+        <div class="auth-tabs" role="tablist" aria-label="Formulários de acesso">
+            <button type="button" class="auth-tab is-active" id="tab-login" data-target="pane-login" role="tab" aria-selected="true">
+                Login
+            </button>
+            <button type="button" class="auth-tab" id="tab-register" data-target="pane-register" role="tab" aria-selected="false">
+                Novo usuário
+            </button>
+        </div>
 
-                <label for="register-password">Senha</label>
-                <input id="register-password" name="password" type="password" required>
-
-                <button type="submit" class="btn">Abrir conta</button>
-            </form>
-        </article>
-
-        <article class="card reveal delay-2">
+        <section class="auth-pane is-active" id="pane-login" role="tabpanel" aria-labelledby="tab-login">
             <h2>Entrar no painel</h2>
             <p class="panel-note">Acesse seu dashboard bancário.</p>
             <form action="{{ url_for('bank.login') }}" method="post" class="form">
-                <label for="login-username">Usuario</label>
-                <input id="login-username" name="username" type="text" required>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <label for="login-username">Usuário</label>
+                <input id="login-username" name="username" type="text" required autocomplete="username">
 
                 <label for="login-password">Senha</label>
-                <input id="login-password" name="password" type="password" required>
+                <input id="login-password" name="password" type="password" required autocomplete="current-password">
 
-                <button type="submit" class="btn btn-alt">Acessar conta</button>
+                <button type="submit" class="btn btn-alt" data-loading-text="Entrando...">Acessar conta</button>
             </form>
-        </article>
-    </div>
+        </section>
+
+        <section class="auth-pane" id="pane-register" role="tabpanel" aria-labelledby="tab-register" hidden>
+            <h2>Abrir conta</h2>
+            <p class="panel-note">Crie suas credenciais para começar.</p>
+            <form action="{{ url_for('bank.register') }}" method="post" class="form">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <label for="register-username">Usuário <span class="field-hint">(mín. 3 caracteres)</span></label>
+                <input id="register-username" name="username" type="text" minlength="3" required autocomplete="username">
+
+                <label for="register-password">Senha <span class="field-hint">(mín. 8 caracteres, com letra e número)</span></label>
+                <input id="register-password" name="password" type="password" minlength="8" required autocomplete="new-password">
+
+                <button type="submit" class="btn" data-loading-text="Criando conta...">Abrir conta</button>
+            </form>
+        </section>
+
+    </article>
 </section>
+
+<script>
+    const todayDateElement = document.getElementById('today-date');
+    if (todayDateElement) {
+        todayDateElement.textContent = new Date().toLocaleDateString('pt-BR', {
+            timeZone: 'America/Sao_Paulo'
+        });
+    }
+
+    const authTabs = document.querySelectorAll('.auth-tab');
+    const authPanes = document.querySelectorAll('.auth-pane');
+
+    authTabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+            const target = tab.getAttribute('data-target');
+
+            authTabs.forEach((item) => {
+                const active = item === tab;
+                item.classList.toggle('is-active', active);
+                item.setAttribute('aria-selected', active ? 'true' : 'false');
+            });
+
+            authPanes.forEach((pane) => {
+                const active = pane.id === target;
+                pane.classList.toggle('is-active', active);
+                pane.hidden = !active;
+            });
+        });
+    });
+</script>
 {% endblock %}

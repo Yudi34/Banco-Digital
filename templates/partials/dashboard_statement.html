@@ -1,0 +1,63 @@
+<article class="card reveal delay-4">
+    <div class="statement-head">
+        <h3>Extrato</h3>
+        <span class="statement-meta">{{ transaction_count }} movimentação{{ 's' if transaction_count != 1 else '' }}</span>
+    </div>
+
+    <div class="statement-filters" role="tablist" aria-label="Filtrar movimentações">
+        <button type="button" class="statement-filter is-active" data-filter="all" role="tab" aria-selected="true">Todas</button>
+        <button type="button" class="statement-filter" data-filter="deposit" role="tab" aria-selected="false">Depósitos</button>
+        <button type="button" class="statement-filter" data-filter="withdraw" role="tab" aria-selected="false">Saques</button>
+        <button type="button" class="statement-filter" data-filter="transfer" role="tab" aria-selected="false">Transferências</button>
+    </div>
+
+    {% if entries %}
+        <ul class="statement-list">
+            {% for entry in entries %}
+                <li class="statement-item" data-kind="{{ entry.kind }}" data-tx-type="{{ entry.tx_type }}">
+                    <span class="statement-icon {{ entry.kind }}">
+                        {% if entry.tx_type == 'deposit' %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+                        {% elif entry.tx_type == 'transfer_in' %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
+                        {% elif entry.tx_type == 'transfer_out' %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 7 12 3 8 7"/><line x1="12" y1="21" x2="12" y2="3"/></svg>
+                        {% else %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+                        {% endif %}
+                    </span>
+                    <div class="statement-info">
+                        <div class="statement-label-row">
+                            <p class="statement-title">{{ entry.label }}</p>
+                            <span class="statement-badge {{ entry.tx_type }}">
+                                {% if entry.tx_type == 'deposit' %}
+                                    Depósito
+                                {% elif entry.tx_type == 'withdraw' %}
+                                    Saque
+                                {% elif entry.tx_type == 'transfer_in' %}
+                                    Transferência +
+                                {% elif entry.tx_type == 'transfer_out' %}
+                                    Transferência -
+                                {% else %}
+                                    Movimento
+                                {% endif %}
+                            </span>
+                        </div>
+                        <p class="statement-description">{{ entry.description }}</p>
+                    </div>
+                    <div class="statement-right">
+                        <p class="statement-value {{ entry.tx_type }}">
+                            {% if entry.tx_type in ["deposit", "transfer_in"] %}+{% else %}-{% endif %}R$ {{ entry.amount|brl }}
+                        </p>
+                        {% if entry.timestamp %}
+                            <p class="statement-date">{{ entry.timestamp }}</p>
+                        {% endif %}
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+        <p class="empty-state" id="statement-empty-filter" hidden>Nenhuma movimentação para este filtro.</p>
+    {% else %}
+        <p class="empty-state">Nenhuma movimentação registrada ainda.</p>
+    {% endif %}
+</article>

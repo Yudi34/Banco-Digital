@@ -5,6 +5,7 @@ from typing import Any
 from flask import session
 
 from atm import ATM
+from money import parse_amount
 
 
 def get_atm() -> ATM:
@@ -24,16 +25,25 @@ def get_logged_in_user() -> str | None:
     return username
 
 
-def _extract_amount(history_entry: str) -> float:
-    marker = "R$"
-    if marker not in history_entry:
-        return 0.0
+def _parse_entry(entry: Any) -> dict[str, Any]:
+    """Normaliza entradas do histórico — suporta formato dict (novo) e string (legado)."""
+    if isinstance(entry, dict):
+        return entry
 
-    raw = history_entry.split(marker, maxsplit=1)[1].strip().replace(",", ".")
+    # Formato legado: "Depósito: +R$200.00" ou "Saque: -R$100.00"
+    is_deposit = entry.startswith("Depósito")
+    raw = entry.split("R$", maxsplit=1)[-1].strip()
     try:
-        return float(raw)
+        amount = parse_amount(raw)
     except ValueError:
-        return 0.0
+        amount = 0.0
+
+    return {
+        "type": "deposit" if is_deposit else "withdraw",
+        "amount": amount,
+        "description": entry,
+        "timestamp": None,
+    }
 
 
 def build_dashboard_data(username: str) -> dict[str, Any]:
@@ -42,27 +52,40 @@ def build_dashboard_data(username: str) -> dict[str, Any]:
 
     balance = atm.get_balance()
     history = list(atm.get_history())
+    account_info = atm.get_account_info()
 
     entries: list[dict[str, Any]] = []
     total_deposits = 0.0
     total_withdraws = 0.0
 
-    for index, entry in enumerate(reversed(history), start=1):
-        is_deposit = entry.startswith("Depósito")
-        amount = _extract_amount(entry)
+    for index, raw_entry in enumerate(reversed(history), start=1):
+        entry = _parse_entry(raw_entry)
+        tx_type = entry.get("type", "withdraw")
+        amount = entry.get("amount", 0.0)
 
-        if is_deposit:
+        is_credit = tx_type in ("deposit", "transfer_in")
+
+        if is_credit:
             total_deposits += amount
         else:
             total_withdraws += amount
 
+        label_map = {
+            "deposit": "Depósito",
+            "withdraw": "Saque",
+            "transfer_out": "Transferência enviada",
+            "transfer_in": "Transferência recebida",
+        }
+
         entries.append(
             {
                 "id": index,
-                "label": "Depósito" if is_deposit else "Saque",
+                "label": label_map.get(tx_type, "Movimentação"),
                 "amount": amount,
-                "kind": "deposit" if is_deposit else "withdraw",
-                "description": entry,
+                "kind": "deposit" if is_credit else "withdraw",
+                "description": entry.get("description", ""),
+                "timestamp": entry.get("timestamp"),
+                "tx_type": tx_type,
             }
         )
 
@@ -72,4 +95,6 @@ def build_dashboard_data(username: str) -> dict[str, Any]:
         "total_deposits": total_deposits,
         "total_withdraws": total_withdraws,
         "count": len(entries),
+        "account_info": account_info,
+        "transaction_limits": atm.get_transaction_limits(),
     }

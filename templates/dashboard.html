@@ -7,82 +7,145 @@
             <p class="kicker">PAINEL FINANCEIRO</p>
             <h1>Bem-vindo, {{ username }}</h1>
         </div>
-        <form action="{{ url_for('bank.logout') }}" method="post">
-            <button type="submit" class="btn ghost">Encerrar sessão</button>
-        </form>
+        <div class="dashboard-actions-top">
+            <form action="{{ url_for('bank.logout') }}" method="post">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <button type="submit" class="btn ghost" data-loading-text="Saindo...">Encerrar sessão</button>
+            </form>
+        </div>
     </header>
+
+    <nav class="page-tabs reveal delay-1" aria-label="Navegação de conta">
+        <a href="{{ url_for('bank.dashboard') }}" class="page-tab is-active">Painel</a>
+        <a href="{{ url_for('bank.statement') }}" class="page-tab">Extrato</a>
+        <a href="{{ url_for('bank.profile') }}" class="page-tab">Perfil</a>
+    </nav>
 
     <section class="card-account reveal delay-1">
         <div class="account-left">
-            <p class="account-label">Conta digital</p>
-            <h2>R$ {{ "%.2f"|format(balance) }}</h2>
-            <p class="account-foot">Agência 0001 • Conta 45892-0</p>
+            <p class="account-label">CONTA CORRENTE DIGITAL</p>
+            <div class="balance-row">
+                <h2 id="balance-value">R$ {{ balance|brl }}</h2>
+                <button type="button" class="balance-toggle" id="balance-toggle" aria-label="Ocultar saldo" title="Mostrar/ocultar saldo">
+                    <svg id="icon-eye" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    <svg id="icon-eye-off" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                </button>
+            </div>
+            <p class="account-foot">
+                Ag. {{ account_info.agency }} &nbsp;|&nbsp; Conta {{ account_info.account_number }}
+            </p>
         </div>
         <div class="account-chip"></div>
     </section>
 
     <section class="kpi-grid">
         <article class="kpi-card reveal delay-1">
-            <p>Entradas</p>
-            <strong>R$ {{ "%.2f"|format(total_deposits) }}</strong>
+            <p>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ok)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+                Entradas
+            </p>
+            <strong class="ok">R$ {{ total_deposits|brl }}</strong>
         </article>
         <article class="kpi-card reveal delay-2">
-            <p>Saídas</p>
-            <strong>R$ {{ "%.2f"|format(total_withdraws) }}</strong>
+            <p>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+                Saídas
+            </p>
+            <strong class="danger">R$ {{ total_withdraws|brl }}</strong>
         </article>
         <article class="kpi-card reveal delay-3">
-            <p>Movimentações</p>
+            <p>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                Movimentações
+            </p>
             <strong>{{ transaction_count }}</strong>
         </article>
     </section>
 
-    <div class="ops-grid">
-        <article class="card reveal delay-2">
-            <h3>Novo depósito</h3>
-            <p class="panel-note">Adicione saldo instantaneamente.</p>
-            <form action="{{ url_for('bank.transaction') }}" method="post" class="form inline-form">
-                <input type="hidden" name="type" value="deposit">
-                <label for="deposit-amount">Valor (R$)</label>
-                <input id="deposit-amount" name="amount" type="text" placeholder="0.00" required>
-                <button type="submit" class="btn">Depositar</button>
-            </form>
-        </article>
-
-        <article class="card reveal delay-3">
-            <h3>Novo saque</h3>
-            <p class="panel-note">Retire saldo da conta corrente.</p>
-            <form action="{{ url_for('bank.transaction') }}" method="post" class="form inline-form">
-                <input type="hidden" name="type" value="withdraw">
-                <label for="withdraw-amount">Valor (R$)</label>
-                <input id="withdraw-amount" name="amount" type="text" placeholder="0.00" required>
-                <button type="submit" class="btn btn-alt">Sacar</button>
-            </form>
-        </article>
-    </div>
-
-    <article class="card reveal delay-4">
-        <div class="statement-head">
-            <h3>Extrato</h3>
-            <span class="statement-meta">Últimas movimentações</span>
-        </div>
-
-        {% if entries %}
-            <ul class="statement-list">
-                {% for entry in entries %}
-                    <li class="statement-item">
-                        <div>
-                            <p class="statement-title">{{ entry.label }}</p>
-                            <p class="statement-description">{{ entry.description }}</p>
-                        </div>
-                        <p class="statement-value {{ entry.kind }}">
-                            {% if entry.kind == "deposit" %}+{% else %}-{% endif %}R$ {{ "%.2f"|format(entry.amount) }}
-                        </p>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p class="panel-note">Nenhuma movimentação registrada ainda.</p>
-        {% endif %}
-    </article>
+    {% include "partials/dashboard_actions.html" %}
 </section>
+
+<script>
+    const balanceEl = document.getElementById('balance-value');
+    const iconEye = document.getElementById('icon-eye');
+    const iconEyeOff = document.getElementById('icon-eye-off');
+    const realBalance = balanceEl.textContent;
+    let hidden = false;
+
+    document.getElementById('balance-toggle').addEventListener('click', () => {
+        hidden = !hidden;
+        balanceEl.textContent = hidden ? 'R$ ••••••' : realBalance;
+        iconEye.style.display = hidden ? 'none' : '';
+        iconEyeOff.style.display = hidden ? '' : 'none';
+    });
+
+    const sectionTabs = document.querySelectorAll('.section-tab');
+    const sectionPanes = document.querySelectorAll('.section-pane');
+    const validTabs = new Set(['ops-deposit', 'ops-withdraw', 'ops-transfer']);
+
+    const setActiveSection = (target) => {
+        sectionTabs.forEach((item) => {
+            const active = item.getAttribute('data-target') === target;
+            item.classList.toggle('is-active', active);
+            item.setAttribute('aria-selected', active ? 'true' : 'false');
+        });
+
+        sectionPanes.forEach((pane) => {
+            const active = pane.id === target;
+            pane.classList.toggle('is-active', active);
+            pane.hidden = !active;
+        });
+    };
+
+    sectionTabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+            const target = tab.getAttribute('data-target');
+            if (validTabs.has(target)) {
+                setActiveSection(target);
+            }
+        });
+    });
+
+    const params = new URLSearchParams(window.location.search);
+    const activeTabFromUrl = params.get('tab');
+    if (activeTabFromUrl && validTabs.has(activeTabFromUrl)) {
+        setActiveSection(activeTabFromUrl);
+    }
+
+    const formatCentsToBr = (digitsOnly) => {
+        const raw = digitsOnly.replace(/\D/g, '');
+        const normalized = raw || '0';
+        const asNumber = Number(normalized) / 100;
+        return asNumber.toLocaleString('pt-BR', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    };
+
+    const currencyInputs = document.querySelectorAll('[data-currency-input]');
+    currencyInputs.forEach((input) => {
+        input.addEventListener('input', () => {
+            const onlyDigits = input.value.replace(/\D/g, '');
+            input.value = formatCentsToBr(onlyDigits);
+        });
+    });
+
+    const quickAmountRows = document.querySelectorAll('.quick-amounts');
+    quickAmountRows.forEach((row) => {
+        const targetId = row.getAttribute('data-target-input');
+        const targetInput = targetId ? document.getElementById(targetId) : null;
+        if (!targetInput) {
+            return;
+        }
+
+        row.querySelectorAll('.quick-amount').forEach((button) => {
+            button.addEventListener('click', () => {
+                const amount = button.getAttribute('data-amount') || '0';
+                const digits = String(Math.round(Number(amount) * 100));
+                targetInput.value = formatCentsToBr(digits);
+                targetInput.focus();
+            });
+        });
+    });
+</script>
 {% endblock %}

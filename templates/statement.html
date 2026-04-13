@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="dashboard-shell reveal">
+    <header class="dashboard-header">
+        <div>
+            <p class="kicker">EXTRATO</p>
+            <h1>Movimentações de {{ username }}</h1>
+        </div>
+        <a href="{{ url_for('bank.dashboard') }}" class="btn">Voltar ao painel</a>
+    </header>
+
+    <nav class="page-tabs reveal delay-1" aria-label="Navegação de conta">
+        <a href="{{ url_for('bank.dashboard') }}" class="page-tab">Painel</a>
+        <a href="{{ url_for('bank.statement') }}" class="page-tab is-active">Extrato</a>
+        <a href="{{ url_for('bank.profile') }}" class="page-tab">Perfil</a>
+    </nav>
+
+    <section class="kpi-grid">
+        <article class="kpi-card reveal delay-1">
+            <p>Saldo atual</p>
+            <strong>R$ {{ balance|brl }}</strong>
+        </article>
+        <article class="kpi-card reveal delay-2">
+            <p>Entradas</p>
+            <strong class="ok">R$ {{ total_deposits|brl }}</strong>
+        </article>
+        <article class="kpi-card reveal delay-3">
+            <p>Saídas</p>
+            <strong class="danger">R$ {{ total_withdraws|brl }}</strong>
+        </article>
+    </section>
+
+    {% include "partials/dashboard_statement.html" %}
+</section>
+
+<script>
+    const statementFilters = document.querySelectorAll('.statement-filter');
+    const statementItems = document.querySelectorAll('.statement-item');
+    const statementEmptyByFilter = document.getElementById('statement-empty-filter');
+
+    const matchesFilter = (item, filter) => {
+        if (filter === 'all') {
+            return true;
+        }
+
+        const txType = item.getAttribute('data-tx-type') || '';
+        if (filter === 'transfer') {
+            return txType === 'transfer_in' || txType === 'transfer_out';
+        }
+
+        return txType === filter;
+    };
+
+    const applyFilter = (filter) => {
+        statementFilters.forEach((button) => {
+            const isActive = button.getAttribute('data-filter') === filter;
+            button.classList.toggle('is-active', isActive);
+            button.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
+
+        let visibleCount = 0;
+        statementItems.forEach((item) => {
+            const visible = matchesFilter(item, filter);
+            item.hidden = !visible;
+            if (visible) {
+                visibleCount += 1;
+            }
+        });
+
+        if (statementEmptyByFilter) {
+            statementEmptyByFilter.hidden = visibleCount !== 0;
+        }
+    };
+
+    statementFilters.forEach((button) => {
+        button.addEventListener('click', () => {
+            const filter = button.getAttribute('data-filter') || 'all';
+            applyFilter(filter);
+        });
+    });
+</script>
+{% endblock %}

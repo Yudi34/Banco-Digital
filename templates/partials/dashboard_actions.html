@@ -1,0 +1,66 @@
+<article class="card reveal delay-2">
+    <div class="section-tabs" role="tablist" aria-label="Ações da conta">
+        <button type="button" class="section-tab is-active" data-target="ops-deposit" role="tab" aria-selected="true">Depósito</button>
+        <button type="button" class="section-tab" data-target="ops-withdraw" role="tab" aria-selected="false">Saque</button>
+        <button type="button" class="section-tab" data-target="ops-transfer" role="tab" aria-selected="false">Transferência</button>
+    </div>
+
+    <section class="section-pane is-active" id="ops-deposit" role="tabpanel">
+        <h3>Depósito</h3>
+        <p class="panel-note">Adicione saldo instantaneamente.</p>
+        <form action="{{ url_for('bank.transaction') }}" method="post" class="form inline-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <input type="hidden" name="type" value="deposit">
+            <label for="deposit-amount">Valor (R$)</label>
+            <input id="deposit-amount" name="amount" type="text" placeholder="0,00" inputmode="decimal" data-currency-input required>
+            <p class="form-help">Digite como preferir: 50, 50,90 ou 1.000,50.</p>
+            <div class="quick-amounts" data-target-input="deposit-amount">
+                <button type="button" class="quick-amount" data-amount="50">+ R$ 50</button>
+                <button type="button" class="quick-amount" data-amount="100">+ R$ 100</button>
+                <button type="button" class="quick-amount" data-amount="200">+ R$ 200</button>
+                <button type="button" class="quick-amount" data-amount="500">+ R$ 500</button>
+            </div>
+            <button type="submit" class="btn" data-loading-text="Processando depósito...">Depositar</button>
+        </form>
+    </section>
+
+    <section class="section-pane" id="ops-withdraw" role="tabpanel" hidden>
+        <h3>Saque</h3>
+        <p class="panel-note">Retire saldo da conta corrente.</p>
+        <form action="{{ url_for('bank.transaction') }}" method="post" class="form inline-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <input type="hidden" name="type" value="withdraw">
+            <label for="withdraw-amount">Valor (R$)</label>
+            <input id="withdraw-amount" name="amount" type="text" placeholder="0,00" inputmode="decimal" data-currency-input required>
+            <p class="form-help">Atalho rápido para saques comuns.</p>
+            <div class="quick-amounts" data-target-input="withdraw-amount">
+                <button type="button" class="quick-amount" data-amount="20">R$ 20</button>
+                <button type="button" class="quick-amount" data-amount="50">R$ 50</button>
+                <button type="button" class="quick-amount" data-amount="100">R$ 100</button>
+                <button type="button" class="quick-amount" data-amount="200">R$ 200</button>
+            </div>
+            <button type="submit" class="btn btn-alt" data-loading-text="Processando saque...">Sacar</button>
+        </form>
+    </section>
+
+    <section class="section-pane" id="ops-transfer" role="tabpanel" hidden>
+        <h3>Transferência</h3>
+        <p class="panel-note">Envie para outra conta NovaConta.</p>
+        <form action="{{ url_for('bank.transfer') }}" method="post" class="form inline-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <label for="transfer-target">Usuário de destino</label>
+            <input id="transfer-target" name="target" type="text" placeholder="Nome do usuário" autocomplete="off" required>
+            <label for="transfer-amount">Valor (R$)</label>
+            <input id="transfer-amount" name="amount" type="text" placeholder="0,00" inputmode="decimal" data-currency-input required>
+            <p class="form-help">Valor será enviado no padrão brasileiro.</p>
+            <div class="quick-amounts" data-target-input="transfer-amount">
+                <button type="button" class="quick-amount" data-amount="100">R$ 100</button>
+                <button type="button" class="quick-amount" data-amount="250">R$ 250</button>
+                <button type="button" class="quick-amount" data-amount="500">R$ 500</button>
+                <button type="button" class="quick-amount" data-amount="1000">R$ 1.000</button>
+            </div>
+            <button type="submit" class="btn btn-transfer" data-loading-text="Enviando transferência...">Transferir</button>
+        </form>
+    </section>
+
+</article>
