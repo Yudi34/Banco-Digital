@@ -2,6 +2,17 @@
 
 Aplicativo bancario web feito com Flask para estudos e portfolio.
 
+Esta e a versao base do projeto, com a estrutura inicial da aplicacao bancaria.
+Se voce quiser ver a evolucao visual e estrutural, consulte a branch `versao-2-0`
+ou a tag `v2.0.0` no GitHub.
+
+## Posicionamento desta versao
+
+- Implementacao original do sistema
+- Interface mais simples
+- Estrutura anterior das rotas
+- Base para comparacao com a versao 2.0
+
 ## Funcionalidades
 
 - Criacao de conta
