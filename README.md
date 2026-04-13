@@ -1,24 +1,24 @@
 # Banco Digital (Flask)
 
-Aplicativo bancario web feito com Flask para estudos e portfolio.
+Aplicativo bancário web feito com Flask para estudos e portfólio.
 
-Esta e a versao base do projeto, com a estrutura inicial da aplicacao bancaria.
-Se voce quiser ver a evolucao visual e estrutural, consulte a branch `versao-2-0`
+Esta é a versão base do projeto, com a estrutura inicial da aplicação bancária.
+Se você quiser ver a evolução visual e estrutural, consulte a branch `versao-2-0`
 ou a tag `v2.0.0` no GitHub.
 
-## Posicionamento desta versao
+## Posicionamento desta versão
 
-- Implementacao original do sistema
+- Implementação original do sistema
 - Interface mais simples
 - Estrutura anterior das rotas
-- Base para comparacao com a versao 2.0
+- Base para comparação com a versão 2.0
 
 ## Funcionalidades
 
-- Criacao de conta
+- Criação de conta
 - Login e logout
-- Deposito e saque
-- Extrato de transacoes
+- Depósito e saque
+- Extrato de transações
 - Dashboard com resumo financeiro
 
 ## Tecnologias
@@ -40,13 +40,13 @@ ou a tag `v2.0.0` no GitHub.
 
 ## Deploy no Render
 
-O projeto ja esta preparado com `render.yaml` e `Procfile`.
+O projeto já está preparado com `render.yaml` e `Procfile`.
 
 Passos:
 
 1. Entre em https://render.com e conecte sua conta GitHub.
 2. Clique em New + > Web Service.
-3. Selecione o repositorio `Banco-Digital`.
+3. Selecione o repositório `Banco-Digital`.
 4. Confirme os comandos:
    - Build Command: `pip install -r requirements.txt`
    - Start Command: `gunicorn main:app`
@@ -62,11 +62,11 @@ Passos:
 ## Estrutura principal
 
 - `main.py`: ponto de entrada da aplicação
-- `webapp/`: rotas e servicos da camada web
+- `webapp/`: rotas e serviços da camada web
 - `templates/`: telas HTML
 - `static/`: estilos CSS
-- `atm.py`: logica de conta e transacoes
+- `atm.py`: lógica de conta e transações
 
 ## Screenshot
 
-Voce pode adicionar uma imagem do sistema em `static/screenshot.png` e incluir no README.
+Você pode adicionar uma imagem do sistema em `static/screenshot.png` e incluí-la no README.
