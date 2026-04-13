@@ -15,6 +15,16 @@ nova organização de rotas e uma experiência de uso mais completa do que a ver
 - Separação das rotas em módulos de autenticação e operações bancárias
 - Melhor tratamento de valores monetários com parser dedicado
 
+## Melhorias de segurança
+
+- Proteção contra CSRF nos formulários
+- Cookies de sessão com políticas mais seguras
+- Cabeçalhos HTTP de segurança para proteção adicional da aplicação
+- Hash de senha com migração de credenciais antigas em texto puro
+- Validação de força mínima de senha
+- Bloqueio temporário após múltiplas tentativas de login
+- Confirmação por senha atual em operações sensíveis
+
 ## Funcionalidades
 
 - Criação de conta
