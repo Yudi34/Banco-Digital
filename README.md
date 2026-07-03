@@ -1,92 +1,49 @@
 # Banco Digital 2.0 (Flask)
 
-Aplicativo bancário web feito com Flask para estudos e portfólio.
+Aplicação bancária web completa desenvolvida com Python e Flask.  
+🌐 **Deploy ao vivo:** [banco-digital-1.onrender.com](https://banco-digital-1.onrender.com)
 
-Esta é a versão 2.0 do projeto, com evolução visual, melhorias de acessibilidade,
-nova organização de rotas e uma experiência de uso mais completa do que a versão base.
+> ⚠️ O servidor pode demorar ~50s para carregar na primeira visita (plano gratuito Render)
 
-## O que mudou na 2.0
+## 📸 Screenshots
 
-- Novo visual com layout mais moderno e responsivo
-- Dashboard, perfil e extrato redesenhados
-- Filtros no extrato por tipo de movimentação
-- Melhorias de acessibilidade, foco por teclado e contraste alto
-- Feedback visual de carregamento nos formulários
-- Separação das rotas em módulos de autenticação e operações bancárias
-- Melhor tratamento de valores monetários com parser dedicado
+![Login](https://github.com/user-attachments/assets/a80e25b1-cf09-436d-a4a9-0468bda35c02)
+![Dashboard](https://github.com/user-attachments/assets/87f1d89a-ffd1-40f3-aef6-1239a6d15aa3)
 
-## Melhorias de segurança
+## ✨ Funcionalidades
 
-- Proteção contra CSRF nos formulários
-- Cookies de sessão com políticas mais seguras
-- Cabeçalhos HTTP de segurança para proteção adicional da aplicação
-- Hash de senha com migração de credenciais antigas em texto puro
-- Validação de força mínima de senha
-- Bloqueio temporário após múltiplas tentativas de login
-- Confirmação por senha atual em operações sensíveis
-
-## Funcionalidades
-
-- Criação de conta
-- Login e logout
-- Depósito e saque
-- Extrato de transações
-- Dashboard com resumo financeiro
+- Cadastro e login/logout com autenticação segura
+- Depósito, saque e transferência entre contas
+- Extrato com filtros por tipo de movimentação
+- Dashboard financeiro com resumo de entradas e saídas
 - Perfil com alteração de senha e limites por operação
-- Transferência entre usuários
 
-## Tecnologias
+## 🔐 Segurança
 
-- Python 3
-- Flask
-- HTML + CSS
-- Jinja2
+- Proteção CSRF nos formulários
+- Hash de senhas com SCRYPT
+- Bloqueio temporário após múltiplas tentativas de login
+- Cookies de sessão com políticas seguras
+- Cabeçalhos HTTP de segurança
 
-## Como rodar localmente
+## 🛠️ Tecnologias
 
-1. Abra o terminal na pasta do projeto.
-2. Execute:
+- Python 3 · Flask · Jinja2
+- HTML · CSS
+- Git · GitHub
+- Deploy: Render
 
-```powershell
-& ".\.venv-1\Scripts\python.exe" .\main.py
+## ▶️ Como rodar localmente
+
+```bash
+git clone https://github.com/Yudi34/Banco-Digital
+cd Banco-Digital
+pip install -r requirements.txt
+python main.py
 ```
 
-3. Abra no navegador: http://127.0.0.1:5000
+Acesse: http://127.0.0.1:5000
 
-## Deploy no Render
+## 👨‍💻 Autor
 
-O projeto já está preparado com `render.yaml` e `Procfile`.
-
-Passos:
-
-1. Entre em https://render.com e conecte sua conta GitHub.
-2. Clique em New + > Web Service.
-3. Selecione o repositório `Banco-Digital`.
-4. Confirme os comandos:
-   - Build Command: `pip install -r requirements.txt`
-   - Start Command: `gunicorn main:app`
-5. Clique em Create Web Service.
-
-## Deploy no Railway
-
-1. Entre em https://railway.app.
-2. Clique em New Project > Deploy from GitHub Repo.
-3. Selecione `Banco-Digital`.
-4. O Railway vai usar o `Procfile` automaticamente.
-
-## Estrutura principal
-
-- `main.py`: ponto de entrada da aplicação
-- `webapp/`: rotas e serviços da camada web
-- `templates/`: telas HTML
-- `static/`: estilos CSS
-- `atm.py`: lógica de conta e transações
-- `money.py`: parse e formatação de valores monetários
-
-## Versões
-
-- `versao-antiga`: implementação base do projeto
-- `versao-2-0`: versão atual com melhorias visuais e estruturais
-- `v2.0.0`: tag da release 2.0
-
-
+Pedro Yudi — [LinkedIn](https://linkedin.com/in/pedro-yudi-matsuoi-freire-3a799b349) · [GitHub](https://github.com/Yudi34)
